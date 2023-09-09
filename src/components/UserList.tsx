@@ -29,14 +29,14 @@ export type User = {
 };
 
 const USER_TYPE = {
-    ADMIN_USER: "Supervisor",
-    GENERAL_USER: "Operator",
+    ADMIN_USER: "Leader",
+    GENERAL_USER: "Follower",
 };
 
 const dummyData: User[] = [
     {
         id: 1,
-        name: "Alexander Rassel",
+        name: "Alexander",
         login_id: "login123456",
         roles: [USER_TYPE.ADMIN_USER],
         icon_url: "",
