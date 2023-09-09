@@ -138,67 +138,77 @@ export const UserList: FC = memo(() => {
                         alignItems: "center",
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexFlow: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <ListItemIcon>
-                            <Paper
+                    {data.id !== 0 ? (
+                        <>
+                            <Box
                                 sx={{
-                                    padding: "3px",
-                                    margin: 1,
-                                    borderRadius: "100%",
-                                    bgcolor:
-                                        data.roles[0] === USER_TYPE.ADMIN_USER
-                                            ? BASIC_COLOR.SV
-                                            : BASIC_COLOR.OP,
+                                    display: "flex",
+                                    flexFlow: "column",
+                                    justifyContent: "center",
+                                    alignItems: "center",
                                 }}
                             >
-                                <Avatar
-                                    alt={"paper"}
-                                    src={data.icon_url}
-                                    sx={{ width: 100, height: 100, border: 1 }}
+                                <ListItemIcon>
+                                    <Paper
+                                        sx={{
+                                            padding: "3px",
+                                            margin: 1,
+                                            borderRadius: "100%",
+                                            bgcolor:
+                                                data.roles[0] === USER_TYPE.ADMIN_USER
+                                                    ? BASIC_COLOR.SV
+                                                    : BASIC_COLOR.OP,
+                                        }}
+                                    >
+                                        <Avatar
+                                            alt={"paper"}
+                                            src={data.icon_url}
+                                            sx={{ width: 100, height: 100, border: 1 }}
+                                        />
+                                    </Paper>
+                                </ListItemIcon>
+                                <Chip
+                                    sx={{ mt: 1 }}
+                                    label={data.roles[0]}
+                                    color={
+                                        data.roles[0] === USER_TYPE.ADMIN_USER
+                                            ? "primary"
+                                            : "warning"
+                                    }
+                                    size="medium"
                                 />
-                            </Paper>
-                        </ListItemIcon>
-                        <Chip
-                            sx={{ mt: 1 }}
-                            label={data.roles[0]}
-                            color={
-                                data.roles[0] === USER_TYPE.ADMIN_USER ? "primary" : "warning"
-                            }
-                            size="medium"
-                        />
-                        {/* <TextField
+                                {/* <TextField
                         variant="standard"
                         value={data.name}
                         sx={{ mt: 2 }}
                     >
                         {data.name}
                     </TextField> */}
-                        <Typography sx={{ mt: 2, fontSize: 25 }}>{data.name}</Typography>
-                        <Box sx={{ mt: 2, color: "gray" }}>
-                            {createLabel("ログインID", data.login_id)}
-                            {createLabel("最終ログイン", data.last_login)}
-                        </Box>
-                        <Box sx={{ mt: 2, color: "gray" }}>
-                            {createLabel("登録日時", data.created_at)}
-                            {createLabel("更新日時", data.updated_at)}
-                        </Box>
-                    </Box>
-                    <IconButton
-                        onClick={() => {
-                            setIsOpenDeleteDialog(true);
-                        }}
-                        aria-label="delete"
-                        sx={{ mt: 2 }}
-                    >
-                        <DeleteIcon fontSize="medium" color="error" />
-                    </IconButton>
+                                <Typography sx={{ mt: 2, fontSize: 25 }}>
+                                    {data.name}
+                                </Typography>
+                                <Box sx={{ mt: 2, color: "gray" }}>
+                                    {createLabel("ログインID", data.login_id)}
+                                    {createLabel("最終ログイン", data.last_login)}
+                                </Box>
+                                <Box sx={{ mt: 2, color: "gray" }}>
+                                    {createLabel("登録日時", data.created_at)}
+                                    {createLabel("更新日時", data.updated_at)}
+                                </Box>
+                            </Box>
+                            <IconButton
+                                onClick={() => {
+                                    setIsOpenDeleteDialog(true);
+                                }}
+                                aria-label="delete"
+                                sx={{ mt: 2 }}
+                            >
+                                <DeleteIcon fontSize="medium" color="error" />
+                            </IconButton>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </Paper>
                 <Dialog
                     open={isOpenDeleteDialog}
@@ -208,8 +218,19 @@ export const UserList: FC = memo(() => {
                 >
                     <DialogTitle>Delete User?</DialogTitle>
                     <DialogActions>
-                        <Button onClick={() => setIsOpenDeleteDialog(false)} color="inherit">Cancel</Button>
-                        <Button onClick={() => setIsOpenDeleteDialog(false)} variant="contained" color="primary">OK</Button>
+                        <Button
+                            onClick={() => setIsOpenDeleteDialog(false)}
+                            color="inherit"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => setIsOpenDeleteDialog(false)}
+                            variant="contained"
+                            color="primary"
+                        >
+                            OK
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Box>
