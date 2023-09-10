@@ -27,7 +27,7 @@ const createLabel = (name: string, value: string) => {
 export const UserCard: FC<Props> = memo((props) => {
 
     return (
-        <div id={String(props.index)}>
+        <>
             <MenuItem
                 sx={{ width: "100%" }}
                 onClick={() => {
@@ -59,6 +59,6 @@ export const UserCard: FC<Props> = memo((props) => {
                 />
             </MenuItem>
             <Divider variant="inset" component="li" />
-        </div>
+        </>
     );
 });

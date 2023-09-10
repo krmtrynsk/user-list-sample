@@ -2,20 +2,9 @@ import { memo, FC, useState } from "react";
 
 import Paper from "@mui/material/Paper";
 import MenuList from "@mui/material/MenuList";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Avatar from "@mui/material/Avatar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {
-    Box,
-    Button,
-    Chip,
-    Dialog,
-    DialogActions,
-    DialogTitle,
-    IconButton,
-    Typography,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { UserCard } from "./UserCard";
+import { UserDetail } from "./UserDetail";
 
 export type User = {
     id: number;
@@ -28,9 +17,14 @@ export type User = {
     last_login: string;
 };
 
-const USER_TYPE = {
+export const USER_TYPE = {
     ADMIN_USER: "Leader",
     GENERAL_USER: "Follower",
+};
+
+export const BASIC_COLOR = {
+    ADMIN: "#1769aa",
+    GENERAL: "#f57c00",
 };
 
 const dummyData: User[] = [
@@ -56,21 +50,6 @@ const dummyData: User[] = [
     },
 ];
 
-const BASIC_COLOR = {
-    SV: "#1769aa",
-    OP: "#f57c00",
-};
-
-const createLabel = (name: string, value: string) => {
-    return (
-        <Box sx={{ display: "flex" }}>
-            <Box sx={{ width: 100 }}>{name}</Box>
-            <Box>：</Box>
-            <Box>{value}</Box>
-        </Box>
-    );
-};
-
 export const UserList: FC = memo(() => {
     const [data, setData] = useState({
         id: 0,
@@ -82,18 +61,18 @@ export const UserList: FC = memo(() => {
         updated_at: "",
         last_login: "",
     });
-    const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState<boolean>(false);
 
     const onClickUserCard = (userData: any) => {
         setData(userData);
     };
+
     return (
         <>
             <Box sx={{ display: "flex" }}>
                 {/* ユーザ一覧 */}
                 <Paper
                     sx={{
-                        width: `30%`,
+                        width: `35%`,
                         height: "80vh",
                         overflow: "auto",
                         m: 2,
@@ -105,13 +84,14 @@ export const UserList: FC = memo(() => {
                         <MenuList>
                             {dummyData.map((user, index) => (
                                 <UserCard
+                                    key={index}
                                     index={index}
                                     onClickUserCard={onClickUserCard}
                                     data={user}
                                     icon_color={
                                         user.roles[0] === USER_TYPE.ADMIN_USER
-                                            ? BASIC_COLOR.SV
-                                            : BASIC_COLOR.OP
+                                            ? BASIC_COLOR.ADMIN
+                                            : BASIC_COLOR.GENERAL
                                     }
                                     chip_color={
                                         user.roles[0] === USER_TYPE.ADMIN_USER
@@ -126,7 +106,7 @@ export const UserList: FC = memo(() => {
                 {/* ユーザ詳細 */}
                 <Paper
                     sx={{
-                        width: `70%`,
+                        width: `65%`,
                         height: "80vh",
                         overflow: "auto",
                         borderRadius: 5,
@@ -138,101 +118,8 @@ export const UserList: FC = memo(() => {
                         alignItems: "center",
                     }}
                 >
-                    {data.id !== 0 ? (
-                        <>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexFlow: "column",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <Paper
-                                        sx={{
-                                            padding: "3px",
-                                            margin: 1,
-                                            borderRadius: "100%",
-                                            bgcolor:
-                                                data.roles[0] === USER_TYPE.ADMIN_USER
-                                                    ? BASIC_COLOR.SV
-                                                    : BASIC_COLOR.OP,
-                                        }}
-                                    >
-                                        <Avatar
-                                            alt={"paper"}
-                                            src={data.icon_url}
-                                            sx={{ width: 100, height: 100, border: 1 }}
-                                        />
-                                    </Paper>
-                                </ListItemIcon>
-                                <Chip
-                                    sx={{ mt: 1 }}
-                                    label={data.roles[0]}
-                                    color={
-                                        data.roles[0] === USER_TYPE.ADMIN_USER
-                                            ? "primary"
-                                            : "warning"
-                                    }
-                                    size="medium"
-                                />
-                                {/* <TextField
-                        variant="standard"
-                        value={data.name}
-                        sx={{ mt: 2 }}
-                    >
-                        {data.name}
-                    </TextField> */}
-                                <Typography sx={{ mt: 2, fontSize: 25 }}>
-                                    {data.name}
-                                </Typography>
-                                <Box sx={{ mt: 2, color: "gray" }}>
-                                    {createLabel("ログインID", data.login_id)}
-                                    {createLabel("最終ログイン", data.last_login)}
-                                </Box>
-                                <Box sx={{ mt: 2, color: "gray" }}>
-                                    {createLabel("登録日時", data.created_at)}
-                                    {createLabel("更新日時", data.updated_at)}
-                                </Box>
-                            </Box>
-                            <IconButton
-                                onClick={() => {
-                                    setIsOpenDeleteDialog(true);
-                                }}
-                                aria-label="delete"
-                                sx={{ mt: 2 }}
-                            >
-                                <DeleteIcon fontSize="medium" color="error" />
-                            </IconButton>
-                        </>
-                    ) : (
-                        <></>
-                    )}
+                    <UserDetail data={data} />
                 </Paper>
-                <Dialog
-                    open={isOpenDeleteDialog}
-                    onClose={() => {
-                        setIsOpenDeleteDialog(false);
-                    }}
-                >
-                    <DialogTitle>Delete User?</DialogTitle>
-                    <DialogActions>
-                        <Button
-                            onClick={() => setIsOpenDeleteDialog(false)}
-                            color="inherit"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={() => setIsOpenDeleteDialog(false)}
-                            variant="contained"
-                            color="primary"
-                        >
-                            OK
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </Box>
         </>
     );
